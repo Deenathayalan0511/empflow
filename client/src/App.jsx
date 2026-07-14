@@ -1,99 +1,155 @@
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 import EmployeeForm from "./components/EmployeeForm";
 import EmployeeList from "./components/EmployeeList";
 
 import {
-  getEmployees,
-  createEmployee,
-  updateEmployee,
-  deleteEmployee,
+    getEmployees,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee
 } from "./services/employeeService";
 
 import "./App.css";
 
 function App() {
-  const [employees, setEmployees] = useState([]);
 
-  const [editing, setEditing] = useState(null);
+    const initialState = {
+        name: "",
+        age: "",
+        gender: "",
+        email: "",
+        department: "",
+        salary: ""
+    };
 
-  const [search, setSearch] = useState("");
-  const [column, setColumn] = useState("name");
+    const [employees, setEmployees] = useState([]);
 
-  const [department, setDepartment] = useState("");
-  const [gender, setGender] = useState("");
+    const [editing, setEditing] = useState(null);
 
-  const [sortBy, setSortBy] = useState("id");
-  const [order, setOrder] = useState("ASC");
+    const loadEmployees = async () => {
 
-  const [page, setPage] = useState(1);
-  const [limit] = useState(5);
+        try {
 
-  const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(0);
+            const res = await getEmployees();
 
-  const loadEmployees = async () => {
-  setLoading(true);
+            setEmployees(res.data.data);
 
-  const res = await getEmployees({
-    search,
-    column,
-    department,
-    gender,
-    sortBy,
-    order,
-    page,
-    limit,
-  });
+        } catch (error) {
 
-  setEmployees(res.data.data);
-  setCount(res.data.total);
+            console.log(error);
 
-  setLoading(false);
-};
+        }
 
- useEffect(() => {
-  loadEmployees();
-}, [
-  search,
-  column,
-  department,
-  gender,
-  sortBy,
-  order,
-  page,
-]);
+    };
 
-  const handleSubmit = async (employee) => {
-    if (editing) {
-      await updateEmployee(editing.id, employee);
-      setEditing(null);
-    } else {
-      console.log("employee : ", employee);
-      await createEmployee(employee);
-    }
+    useEffect(() => {
 
-    loadEmployees();
-  };
+        loadEmployees();
 
-  const handleDelete = async (id) => {
-    await deleteEmployee(id);
-    loadEmployees();
-  };
+    }, []);
 
-  return (
-    <div className="container">
-      <h1>Employee Management System</h1>
+    const addEmployee = async (employee) => {
 
-      <EmployeeForm onSubmit={handleSubmit} editing={editing} />
+        try {
 
-      <EmployeeList
-        employees={employees}
-        onDelete={handleDelete}
-        onEdit={setEditing}
-      />
-    </div>
-  );
+            await createEmployee(employee);
+
+            toast.success("Employee Added Successfully");
+
+            loadEmployees();
+
+        } catch (error) {
+
+            toast.error("Unable to Add Employee");
+
+        }
+
+    };
+
+    const editEmployee = async (employee) => {
+
+        try {
+
+            await updateEmployee(employee.id, employee);
+
+            toast.success("Employee Updated Successfully");
+
+            setEditing(null);
+
+            loadEmployees();
+
+        } catch (error) {
+
+            toast.error("Unable to Update Employee");
+
+        }
+
+    };
+
+    const removeEmployee = async (id) => {
+
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this employee?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+
+            await deleteEmployee(id);
+
+            toast.success("Employee Deleted Successfully");
+
+            loadEmployees();
+
+        } catch (error) {
+
+            toast.error("Unable to Delete Employee");
+
+        }
+
+    };
+
+    return (
+
+        <div className="container-fluit mt-5">
+
+            <div className="">
+
+                <div className="w-50 mx-auto">
+
+                    <EmployeeForm
+                        initialState={initialState}
+                        addEmployee={addEmployee}
+                        editEmployee={editEmployee}
+                        editing={editing}
+                    />
+
+                </div>
+
+                <div className="">
+
+                    <EmployeeList
+                        employees={employees}
+                        setEditing={setEditing}
+                        removeEmployee={removeEmployee}
+                    />
+
+                </div>
+
+            </div>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={2000}
+            />
+
+        </div>
+
+    );
+
 }
 
 export default App;

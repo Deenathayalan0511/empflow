@@ -1,75 +1,143 @@
 function EmployeeList({
-  employees,
-  onDelete,
-  onEdit,
+    employees,
+    setEditing,
+    removeEmployee
 }) {
-  return (
-    <table>
 
-      <thead>
+    return (
 
-        <tr>
+        <div className="card shadow">
 
-          <th>ID</th>
+            <div className="card-header bg-dark text-white">
 
-          <th>Name</th>
+                <h4 className="mb-0">
+                    Employee List
+                </h4>
 
-          <th>Email</th>
+            </div>
 
-          <th>Gender</th>
+            <div className="card-body">
 
-          <th>salary</th>
+                {
+                    employees.length === 0 ? (
 
-          <th>Department</th>
+                        <div className="alert alert-warning text-center">
 
-          <th>Action</th>
+                            No Employees Found
 
-        </tr>
+                        </div>
 
-      </thead>
+                    ) : (
 
-      <tbody>
+                        <div className="table-responsive">
 
-        {employees.map((emp) => (
+                            <table className="table table-bordered table-hover align-middle">
 
-          <tr key={emp.id}>
+                                <thead className="table-primary">
 
-            <td>{emp.id}</td>
+                                    <tr>
 
-            <td>{emp.name}</td>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Email</th>
+                                        <th>Department</th>
+                                        <th>Salary</th>
+                                        <th width="180">
+                                            Action
+                                        </th>
 
-            <td>{emp.email}</td>
+                                    </tr>
 
-            <td>{emp.salary}</td>
+                                </thead>
 
-            <td>{emp.gender}</td>
+                                <tbody>
 
-            <td>{emp.department}</td>
+                                    {
 
-            <td>
+                                        employees.map((employee) => (
 
-              <button
-                onClick={() => onEdit(emp)}
-              >
-                Edit
-              </button>
+                                            <tr key={employee.id}>
 
-              <button
-                onClick={() => onDelete(emp.id)}
-              >
-                Delete
-              </button>
+                                                <td>{employee.id}</td>
 
-            </td>
+                                                <td>{employee.name}</td>
 
-          </tr>
+                                                <td>{employee.age}</td>
 
-        ))}
+                                                <td>
 
-      </tbody>
+                                                    <span className="badge bg-info">
 
-    </table>
-  );
+                                                        {employee.gender}
+
+                                                    </span>
+
+                                                </td>
+
+                                                <td>{employee.email}</td>
+
+                                                <td>
+
+                                                    <span className="badge bg-success">
+
+                                                        {employee.department}
+
+                                                    </span>
+
+                                                </td>
+
+                                                <td>
+
+                                                    ₹ {Number(employee.salary).toLocaleString()}
+
+                                                </td>
+
+                                                <td>
+
+                                                    <button
+                                                        className="btn btn-warning btn-sm me-2"
+                                                        onClick={() => setEditing(employee)}
+                                                    >
+
+                                                        Edit
+
+                                                    </button>
+
+                                                    <button
+                                                        className="btn btn-danger btn-sm"
+                                                        onClick={() => removeEmployee(employee.id)}
+                                                    >
+
+                                                        Delete
+
+                                                    </button>
+
+                                                </td>
+
+                                            </tr>
+
+                                        ))
+
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    )
+
+                }
+
+            </div>
+
+        </div>
+
+    );
+
 }
 
 export default EmployeeList;

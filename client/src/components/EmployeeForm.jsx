@@ -1,17 +1,77 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-const initialState = {
-  name: "",
-  email: "",
-  salary: "",
-  gender: "",
-  department: "",
-};
-
-function EmployeeForm({ onSubmit, editing }) {
+function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
   const [employee, setEmployee] = useState(initialState);
+  const [errors, setErrors] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    email: "",
+    department: "",
+    salary: "",
+  });
+  const validateField = (name, value) => {
+    let error = "";
 
-  const [errors, setErrors] = useState({});
+    switch (name) {
+      case "name":
+        if (!value.trim()) {
+          error = "Name is required";
+        } else if (!/^[A-Za-z ]+$/.test(value)) {
+          error = "Only alphabets are allowed";
+        } else if (value.trim().length < 3) {
+          error = "Name must be at least 3 characters";
+        }
+
+        break;
+
+      case "age":
+        if (!value) {
+          error = "Age is required";
+        } else if (value < 18 || value > 60) {
+          error = "Age must be between 18 and 60";
+        }
+
+        break;
+
+      case "gender":
+        if (!value) {
+          error = "Please select gender";
+        }
+
+        break;
+
+      case "email":
+        if (!value.trim()) {
+          error = "Email is required";
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+          error = "Invalid email address";
+        }
+
+        break;
+
+      case "department":
+        if (!value) {
+          error = "Please select department";
+        }
+
+        break;
+
+      case "salary":
+        if (!value) {
+          error = "Salary is required";
+        } else if (value < 10000) {
+          error = "Salary must be at least ₹10,000";
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    return error;
+  };
 
   useEffect(() => {
     if (editing) {
@@ -19,161 +79,169 @@ function EmployeeForm({ onSubmit, editing }) {
     } else {
       setEmployee(initialState);
     }
-
-    setErrors({});
-  }, [editing]);
+  }, [editing, initialState]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setEmployee({
       ...employee,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
 
-    // Remove error when user starts typing
     setErrors({
       ...errors,
-      [e.target.name]: "",
+      [name]: validateField(name, value),
     });
   };
-
-  // Validation Function
-  const validate = () => {
+  const validateForm = () => {
     let newErrors = {};
 
-    // Name
-    if (!employee.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (employee.name.length < 3) {
-      newErrors.name = "Name must be at least 3 characters";
-    }
-
-    // Email
-    if (!employee.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(employee.email)
-    ) {
-      newErrors.email = "Invalid email address";
-    }
-
-    // Password
-    if (!employee.salary) {
-      newErrors.salary = "salary is required";
-    } else if (employee.salary < 10000) {
-      newErrors.salary = "salary enter above 10000";
-    }
-
-    // Gender
-    if (!employee.gender) {
-      newErrors.gender = "Please select gender";
-    }
-
-    // Department
-    if (!employee.department.trim()) {
-      newErrors.department = "Department is required";
-    }
+    Object.keys(employee).forEach((key) => {
+      newErrors[key] = validateField(key, employee[key]);
+    });
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return Object.values(newErrors).every((error) => error === "");
   };
 
-  const submit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-  console.log("Submit function called");
+    if (!validateForm()) return;
 
-    if (!validate()) {
-      return;
+    if (editing) {
+      editEmployee(employee);
+    } else {
+      addEmployee(employee);
     }
 
-    onSubmit(employee);
-setEmployee({
-  ...initialState,
-  ...editing,
-});
-    setErrors({});
+    setEmployee(initialState);
+
+    setErrors({
+      name: "",
+      age: "",
+      gender: "",
+      email: "",
+      department: "",
+      salary: "",
+    });
   };
 
   return (
-    <form onSubmit={submit}>
+    <div className="card shadow">
+      <div className="card-header bg-primary text-white">
+        <h4 className="mb-0">{editing ? "Update Employee" : "Add Employee"}</h4>
+      </div>
 
-      <input
-        type="text"
-        name="name"
-        placeholder="Enter Name"
-        value={employee.name}
-        onChange={handleChange}
-      />
-      <span className="error">{errors.name}</span>
+      <div className="card-body">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">Name</label>
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter Email"
-        value={employee.email}
-        onChange={handleChange}
-      />
-      <span className="error">{errors.email}</span>
+            <input
+              type="text"
+              className={`form-control ${errors.name ? "is-invalid" : ""}`}
+              name="name"
+              value={employee.name}
+              onChange={handleChange}
+            />
 
-      <input
-        type="number"
-        name="salary"
-        placeholder="Enter salary"
-        value={employee.salary}
-        onChange={handleChange}
-      />
-      <span className="error">{errors.salary}</span>
+            <div className="invalid-feedback">{errors.name}</div>
+          </div>
 
-      <select
-        name="gender"
-        value={employee.gender}
-        onChange={handleChange}
-      >
-        <option value="">Select Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </select>
-      <span className="error">{errors.gender}</span>
+          <div className="mb-3">
+            <label className="form-label">Age</label>
 
-      <input
-        type="text"
-        name="department"
-        placeholder="Department"
-        value={employee.department}
-        onChange={handleChange}
-      />
-      <span className="error">{errors.department}</span>
+            <input
+              type="number"
+              className={`form-control ${errors.age ? "is-invalid" : ""}`}
+              name="age"
+              value={employee.age}
+              onChange={handleChange}
+            />
 
-      <button type="submit">
-        {editing ? "Update Employee" : "Add Employee"}
-      </button>
-      <div className="search-box">
+            <div className="invalid-feedback">{errors.age}</div>
+          </div>
 
-    <input
-        type="text"
-        placeholder="Search..."
-        value={search}
-        onChange={(e)=>setSearch(e.target.value)}
-    />
+          <div className="mb-3">
+            <label className="form-label">Gender</label>
 
-    <select
-        value={column}
-        onChange={(e)=>setColumn(e.target.value)}
-    >
+            <select
+              className={`form-select ${errors.gender ? "is-invalid" : ""}`}
+              name="gender"
+              value={employee.gender}
+              onChange={handleChange}
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
 
-        <option value="name">Name</option>
+            <div className="invalid-feedback">{errors.gender}</div>
+          </div>
 
-        <option value="email">Email</option>
+          <div className="mb-3">
+            <label className="form-label">Email</label>
 
-        <option value="department">Department</option>
+            <input
+              type="email"
+              className={`form-control ${errors.email ? "is-invalid" : ""}`}
+              name="email"
+              value={employee.email}
+              onChange={handleChange}
+            />
 
-    </select>
+            <div className="invalid-feedback">{errors.email}</div>
+          </div>
 
-</div>
+          <div className="mb-3">
+            <label className="form-label">Department</label>
 
-    </form>
+            <select
+              className={`form-select ${errors.department ? "is-invalid" : ""}`}
+              name="department"
+              value={employee.department}
+              onChange={handleChange}
+            >
+              <option value="">Select Department</option>
+              <option>IT</option>
+              <option>HR</option>
+              <option>Finance</option>
+              <option>Marketing</option>
+              <option>Sales</option>
+              <option>Support</option>
+            </select>
+
+            <div className="invalid-feedback">{errors.department}</div>
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Salary</label>
+
+            <input
+              type="number"
+              className={`form-control ${errors.salary ? "is-invalid" : ""}`}
+              name="salary"
+              value={employee.salary}
+              onChange={handleChange}
+            />
+
+            <div className="invalid-feedback">{errors.salary}</div>
+          </div>
+
+          <button
+            className={
+              editing ? "btn btn-warning w-100" : "btn btn-success w-100"
+            }
+          >
+            {editing ? "Update Employee" : "Add Employee"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
 

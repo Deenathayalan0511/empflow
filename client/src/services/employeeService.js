@@ -1,23 +1,19 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/employees";
+const API = "http://localhost:5000/api/employees";
 
-export const getEmployees = () => axios.get(API);
+export const getEmployees = () => {
+    return axios.get(API);
+};
 
-export const createEmployee = (employee) =>
-    axios.post(API, employee);
+export const createEmployee = (employee) => {
+    return axios.post(API, employee);
+};
 
-export const updateEmployee = (id, employee) =>
-    axios.put(`${API}/${id}`, employee);
+export const updateEmployee = (id, employee) => {
+    return axios.put(`${API}/${id}`, employee);
+};
 
-export const deleteEmployee = (id) =>
-    axios.delete(`${API}/${id}`);
-
-export const searchEmployee = (column, value) => {
-  return axios.get(`${API}/search`, {
-    params: {
-      column,
-      value,
-    },
-  });
+export const deleteEmployee = (id) => {
+    return axios.delete(`${API}/${id}`);
 };

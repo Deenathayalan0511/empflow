@@ -1,55 +1,64 @@
+body{
+
+    background:#f4f6f9;
+
+}
+
 .container{
-    width:80%;
-    margin:auto;
+
+    max-width:1300px;
+
+}
+
+.card{
+
+    border:none;
+
+    border-radius:12px;
+
+}
+
+.card-header{
+
+    font-weight:bold;
+
+}
+
+.form-control,
+.form-select{
+
+    border-radius:8px;
+
+}
+
+.btn{
+
+    border-radius:8px;
+
+}
+
+.table{
+
+    margin-bottom:0;
+
+}
+
+.table th{
+
     text-align:center;
+
 }
 
-form{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    width:400px;
-    margin:auto;
+.table td{
+
+    vertical-align:middle;
+
 }
 
-input,
-select,
-button{
-    padding:10px;
-    font-size:16px;
-}
+.badge{
 
-table{
-    width:100%;
-    margin-top:30px;
-    border-collapse:collapse;
-}
+    font-size:14px;
 
-table,
-th,
-td{
-    border:1px solid gray;
-}
+    padding:8px 10px;
 
-th,
-td{
-    padding:10px;
-}
-.error {
-  color: red;
-  font-size: 14px;
-  display: block;
-  margin-bottom: 10px;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-}
-
-button {
-  padding: 10px;
-  cursor: pointer;
 }
