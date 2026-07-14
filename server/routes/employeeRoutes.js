@@ -2,22 +2,16 @@ import express from "express";
 
 import {
     fetchEmployees,
-    fetchEmployee,
-    addEmployee,
+    createEmployee,
     editEmployee,
-    removeEmployee,
-     employeeCount
+    removeEmployee
 } from "../controllers/employeeController.js";
 
 const router = express.Router();
 
-router.get("/count", employeeCount);
-
 router.get("/", fetchEmployees);
 
-router.get("/:id", fetchEmployee);
-
-router.post("/", addEmployee);
+router.post("/", createEmployee);
 
 router.put("/:id", editEmployee);
 
