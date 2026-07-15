@@ -4,12 +4,15 @@ import {
     fetchEmployees,
     createEmployee,
     editEmployee,
-    removeEmployee
+    removeEmployee,
+    filterEmployees
 } from "../controllers/employeeController.js";
 
 const router = express.Router();
 
 router.get("/", fetchEmployees);
+
+router.get("/filter", filterEmployees);
 
 router.post("/", createEmployee);
 

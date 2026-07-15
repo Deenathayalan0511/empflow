@@ -2,7 +2,8 @@ import {
     getEmployees,
     addEmployee,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
+    getFilteredEmployees
 } from "../models/employeeModel.js";
 
 
@@ -24,6 +25,50 @@ export const fetchEmployees = (req, res) => {
         });
 
     });
+
+};
+
+
+// filter
+export const filterEmployees = (req, res) => {
+
+    const {
+        search = "",
+        column = "name",
+        department = "",
+        gender = "",
+        sortBy = "id",
+        order = "DESC",
+        page = 1,
+        limit = 5
+    } = req.query;
+
+    getFilteredEmployees(
+        search,
+        column,
+        department,
+        gender,
+        sortBy,
+        order,
+        Number(page),
+        Number(limit),
+
+        (err, result) => {
+
+            if (err) {
+
+                return res.status(500).json({
+                    success: false,
+                    message: err.message
+                });
+
+            }
+
+            res.json(result);
+
+        }
+
+    );
 
 };
 
