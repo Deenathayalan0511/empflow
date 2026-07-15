@@ -1,170 +1,111 @@
 import avatar from "../assets/avatar.png";
-function EmployeeList({
-    employees,
-    setEditing,
-    removeEmployee
-}) {
+import { Link } from "react-router-dom";
+function EmployeeList({ employees, setEditing, removeEmployee }) {
+  return (
+    <div className="card shadow">
+      <div className="card-header bg-dark text-white">
+        <h4 className="mb-0">Employee List</h4>
+      </div>
 
-    return (
+      <div className="card-body">
+        {employees.length === 0 ? (
+          <div className="alert alert-warning text-center">
+            No Employees Found
+          </div>
+        ) : (
+          <div className="table-responsive">
+            <table className="table table-bordered table-hover align-middle">
+              <thead className="table-primary">
+                <tr>
+                  <th>ID</th>
+                  <th>Photo</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Salary</th>
+                  <th width="180">Action</th>
+                </tr>
+              </thead>
 
-        <div className="card shadow">
+              <tbody>
+                {employees.map((employee) => (
+                  <tr key={employee.id}>
+                    <td>{employee.id}</td>
 
-            <div className="card-header bg-dark text-white">
+                    <td>
+                      {employee.image ? (
+                        <img
+                          src={`http://localhost:5000/uploads/${employee.image}`}
+                          alt={employee.name}
+                          width="60"
+                          height="60"
+                          className="rounded-circle border"
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={avatar}
+                          alt="No Image"
+                          width="60"
+                          height="60"
+                          className="rounded-circle border"
+                        />
+                      )}
+                    </td>
 
-                <h4 className="mb-0">
-                    Employee List
-                </h4>
+                    <td>{employee.name}</td>
 
-            </div>
+                    <td>{employee.age}</td>
 
-            <div className="card-body">
+                    <td>
+                      <span className="badge bg-info">{employee.gender}</span>
+                    </td>
 
-                {
-                    employees.length === 0 ? (
+                    <td>{employee.email}</td>
 
-                        <div className="alert alert-warning text-center">
-                            No Employees Found
-                        </div>
+                    <td>
+                      <span className="badge bg-success">
+                        {employee.department}
+                      </span>
+                    </td>
 
-                    ) : (
+                    <td>₹ {Number(employee.salary).toLocaleString()}</td>
 
-                        <div className="table-responsive">
+                    <td>
+                      <Link
+                        to={`/employee/${employee.id}`}
+                        className="btn btn-primary btn-sm me-2 mb-1"
+                      >
+                        View
+                      </Link>
 
-                            <table className="table table-bordered table-hover align-middle">
+                      <button
+                        className="btn btn-warning btn-sm me-2 mb-1"
+                        onClick={() => setEditing(employee)}
+                      >
+                        Edit
+                      </button>
 
-                                <thead className="table-primary">
-
-                                    <tr>
-
-                                        <th>ID</th>
-                                        <th>Photo</th>
-                                        <th>Name</th>
-                                        <th>Age</th>
-                                        <th>Gender</th>
-                                        <th>Email</th>
-                                        <th>Department</th>
-                                        <th>Salary</th>
-                                        <th width="180">
-                                            Action
-                                        </th>
-
-                                    </tr>
-
-                                </thead>
-
-                                <tbody>
-
-                                    {
-
-                                        employees.map((employee) => (
-
-                                            <tr key={employee.id}>
-
-                                                <td>{employee.id}</td>
-
-                                                <td>
-
-                                                    {
-                                                        employee.image ? (
-
-                                                            <img
-                                                                src={`http://localhost:5000/uploads/${employee.image}`}
-                                                                alt={employee.name}
-                                                                width="60"
-                                                                height="60"
-                                                                className="rounded-circle border"
-                                                                style={{
-                                                                    objectFit: "cover"
-                                                                }}
-                                                            />
-
-                                                        ) : (
-
-                                                            <img
-                                                                src={avatar}
-                                                                alt="No Image"
-                                                                width="60"
-                                                                height="60"
-                                                                className="rounded-circle border"
-                                                            />
-
-                                                        )
-                                                    }
-
-                                                </td>
-
-                                                <td>{employee.name}</td>
-
-                                                <td>{employee.age}</td>
-
-                                                <td>
-
-                                                    <span className="badge bg-info">
-
-                                                        {employee.gender}
-
-                                                    </span>
-
-                                                </td>
-
-                                                <td>{employee.email}</td>
-
-                                                <td>
-
-                                                    <span className="badge bg-success">
-
-                                                        {employee.department}
-
-                                                    </span>
-
-                                                </td>
-
-                                                <td>
-
-                                                    ₹ {Number(employee.salary).toLocaleString()}
-
-                                                </td>
-
-                                                <td>
-
-                                                    <button
-                                                        className="btn btn-warning btn-sm me-2"
-                                                        onClick={() => setEditing(employee)}
-                                                    >
-                                                        Edit
-                                                    </button>
-
-                                                    <button
-                                                        className="btn btn-danger btn-sm"
-                                                        onClick={() => removeEmployee(employee.id)}
-                                                    >
-                                                        Delete
-                                                    </button>
-
-                                                </td>
-
-                                            </tr>
-
-                                        ))
-
-                                    }
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    )
-
-                }
-
-            </div>
-
-        </div>
-
-    );
-
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => removeEmployee(employee.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default EmployeeList;

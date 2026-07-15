@@ -1,11 +1,12 @@
 import express from "express";
 
 import {
-    fetchEmployees,
-    createEmployee,
-    editEmployee,
-    removeEmployee,
-    filterEmployees
+  fetchEmployees,
+  createEmployee,
+  editEmployee,
+  removeEmployee,
+  filterEmployees,
+  fetchEmployeeById,
 } from "../controllers/employeeController.js";
 
 import upload from "../middleware/upload.js";
@@ -16,17 +17,11 @@ router.get("/", fetchEmployees);
 
 router.get("/filter", filterEmployees);
 
-router.post(
-    "/",
-    upload.single("image"),
-    createEmployee
-);
+router.get("/:id", fetchEmployeeById);
 
-router.put(
-    "/:id",
-    upload.single("image"),
-    editEmployee
-);
+router.post("/", upload.single("image"), createEmployee);
+
+router.put("/:id", upload.single("image"), editEmployee);
 
 router.delete("/:id", removeEmployee);
 

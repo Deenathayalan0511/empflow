@@ -1,5 +1,6 @@
 import {
   getEmployees,
+   getEmployeeById,
   addEmployee,
   updateEmployee,
   deleteEmployee,
@@ -21,6 +22,41 @@ export const fetchEmployees = (req, res) => {
       data: result,
     });
   });
+};
+
+// get employee by id
+// GET Employee By ID
+export const fetchEmployeeById = (req, res) => {
+
+    const { id } = req.params;
+
+    getEmployeeById(id, (err, result) => {
+
+        if (err) {
+
+            return res.status(500).json({
+                success: false,
+                message: err.message
+            });
+
+        }
+
+        if (result.length === 0) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Employee Not Found"
+            });
+
+        }
+
+        res.json({
+            success: true,
+            data: result[0]
+        });
+
+    });
+
 };
 
 // filter

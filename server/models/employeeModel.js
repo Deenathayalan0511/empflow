@@ -9,6 +9,20 @@ export const getEmployees = (callback) => {
 
 };
 
+//Get Employee by their id
+// Get Employee By ID
+export const getEmployeeById = (id, callback) => {
+
+    const sql = `
+        SELECT *
+        FROM employees
+        WHERE id = ?
+    `;
+
+    db.query(sql, [id], callback);
+
+};
+
 // filter employees 
 export const getFilteredEmployees = (
 

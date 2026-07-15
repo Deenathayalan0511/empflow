@@ -5,35 +5,24 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import WorkingPage from "./pages/WorkingPage";
 import FilterPage from "./pages/FilterPage";
+import EmployeeDetails from "./pages/EmployeeDetails";
 
 function App() {
+  return (
+    <>
+      <Navbar />
 
-    return (
-        <>
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-            <Navbar />
+        <Route path="/working" element={<WorkingPage />} />
 
-            <Routes>
+        <Route path="/filter" element={<FilterPage />} />
 
-                <Route
-                    path="/"
-                    element={<Home />}
-                />
-
-                <Route
-                    path="/working"
-                    element={<WorkingPage />}
-                />
-
-                <Route
-                    path="/filter"
-                    element={<FilterPage />}
-                />
-
-            </Routes>
-
-        </>
-    );
+        <Route path="/employee/:id" element={<EmployeeDetails />} />
+      </Routes>
+    </>
+  );
 }
 
 export default App;

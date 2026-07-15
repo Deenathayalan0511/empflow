@@ -10,14 +10,16 @@ function Navbar() {
 
         <div className="navbar-nav ms-auto">
           <NavLink className="nav-link" to="/">
+            <i className="bi bi-house-door-fill me-2"></i>
             Home
           </NavLink>
 
           <NavLink className="nav-link" to="/working">
-            Working
+            <i className="bi bi-briefcase-fill  me-2"></i> Working
           </NavLink>
 
           <NavLink className="nav-link" to="/filter">
+            <i className="bi bi-funnel-fill me-2"></i>
             Filter
           </NavLink>
         </div>
