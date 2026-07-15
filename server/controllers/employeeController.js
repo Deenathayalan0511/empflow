@@ -1,139 +1,121 @@
 import {
-    getEmployees,
-    addEmployee,
-    updateEmployee,
-    deleteEmployee,
-    getFilteredEmployees
+  getEmployees,
+  addEmployee,
+  updateEmployee,
+  deleteEmployee,
+  getFilteredEmployees,
 } from "../models/employeeModel.js";
-
 
 // GET
 export const fetchEmployees = (req, res) => {
+  getEmployees((err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
 
-    getEmployees((err, result) => {
-
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.message
-            });
-        }
-
-        res.json({
-            success: true,
-            data: result
-        });
-
+    res.json({
+      success: true,
+      data: result,
     });
-
+  });
 };
-
 
 // filter
 export const filterEmployees = (req, res) => {
+  const {
+    search = "",
+    column = "name",
+    department = "",
+    gender = "",
+    sortBy = "id",
+    order = "DESC",
+    page = 1,
+    limit = 5,
+  } = req.query;
 
-    const {
-        search = "",
-        column = "name",
-        department = "",
-        gender = "",
-        sortBy = "id",
-        order = "DESC",
-        page = 1,
-        limit = 5
-    } = req.query;
+  getFilteredEmployees(
+    search,
+    column,
+    department,
+    gender,
+    sortBy,
+    order,
+    Number(page),
+    Number(limit),
 
-    getFilteredEmployees(
-        search,
-        column,
-        department,
-        gender,
-        sortBy,
-        order,
-        Number(page),
-        Number(limit),
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: err.message,
+        });
+      }
 
-        (err, result) => {
-
-            if (err) {
-
-                return res.status(500).json({
-                    success: false,
-                    message: err.message
-                });
-
-            }
-
-            res.json(result);
-
-        }
-
-    );
-
+      res.json(result);
+    },
+  );
 };
-
 
 // POST
 export const createEmployee = (req, res) => {
+  const employee = {
+    ...req.body,
+    image: req.file ? req.file.filename : null,
+  };
 
-    addEmployee(req.body, (err) => {
+  addEmployee(employee, (err) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
 
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.message
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Employee Added Successfully"
-        });
-
+    res.json({
+      success: true,
+      message: "Employee Added Successfully",
     });
-
+  });
 };
-
 
 // PUT
 export const editEmployee = (req, res) => {
+  const employee = {
+    ...req.body,
+    image: req.file ? req.file.filename : req.body.image,
+  };
 
-    updateEmployee(req.params.id, req.body, (err) => {
+  updateEmployee(req.params.id, employee, (err) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
 
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.message
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Employee Updated Successfully"
-        });
-
+    res.json({
+      success: true,
+      message: "Employee Updated Successfully",
     });
-
+  });
 };
-
 
 // DELETE
 export const removeEmployee = (req, res) => {
+  deleteEmployee(req.params.id, (err) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
 
-    deleteEmployee(req.params.id, (err) => {
-
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                message: err.message
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Employee Deleted Successfully"
-        });
-
+    res.json({
+      success: true,
+      message: "Employee Deleted Successfully",
     });
-
+  });
 };

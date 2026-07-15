@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
   const [employee, setEmployee] = useState(initialState);
+  const [preview, setPreview] = useState("");
   const [errors, setErrors] = useState({
     name: "",
     age: "",
@@ -76,13 +77,36 @@ function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
   useEffect(() => {
     if (editing) {
       setEmployee(editing);
+
+      if (editing.image) {
+        setPreview(`http://localhost:5000/uploads/${editing.image}`);
+      } else {
+        setPreview("");
+      }
     } else {
       setEmployee(initialState);
+
+      setPreview("");
     }
   }, [editing, initialState]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      const file = files[0];
+
+      setEmployee({
+        ...employee,
+        image: file,
+      });
+
+      if (file) {
+        setPreview(URL.createObjectURL(file));
+      }
+
+      return;
+    }
 
     setEmployee({
       ...employee,
@@ -94,6 +118,7 @@ function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
       [name]: validateField(name, value),
     });
   };
+
   const validateForm = () => {
     let newErrors = {};
 
@@ -118,6 +143,8 @@ function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
     }
 
     setEmployee(initialState);
+
+    setPreview("");
 
     setErrors({
       name: "",
@@ -230,6 +257,31 @@ function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
             />
 
             <div className="invalid-feedback">{errors.salary}</div>
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Employee Image</label>
+
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              className="form-control"
+              onChange={handleChange}
+            />
+
+            {preview && (
+              <div className="text-center mt-3">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  width="120"
+                  height="120"
+                  className="rounded-circle border"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            )}
           </div>
 
           <button

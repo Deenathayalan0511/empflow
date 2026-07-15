@@ -132,21 +132,25 @@ export const addEmployee = (employee, callback) => {
 
     const sql = `
         INSERT INTO employees
-        (name, age, gender, email, department, salary)
-        VALUES (?, ?, ?, ?, ?, ?)
+        (name, age, gender, email, department, salary, image)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [
-        employee.name,
-        employee.age,
-        employee.gender,
-        employee.email,
-        employee.department,
-        employee.salary
-    ], callback);
+    db.query(
+        sql,
+        [
+            employee.name,
+            employee.age,
+            employee.gender,
+            employee.email,
+            employee.department,
+            employee.salary,
+            employee.image
+        ],
+        callback
+    );
 
 };
-
 // Update Employee
 export const updateEmployee = (id, employee, callback) => {
 
@@ -158,19 +162,25 @@ export const updateEmployee = (id, employee, callback) => {
             gender=?,
             email=?,
             department=?,
-            salary=?
+            salary=?,
+            image=?
         WHERE id=?
     `;
 
-    db.query(sql, [
-        employee.name,
-        employee.age,
-        employee.gender,
-        employee.email,
-        employee.department,
-        employee.salary,
-        id
-    ], callback);
+    db.query(
+        sql,
+        [
+            employee.name,
+            employee.age,
+            employee.gender,
+            employee.email,
+            employee.department,
+            employee.salary,
+            employee.image,
+            id
+        ],
+        callback
+    );
 
 };
 

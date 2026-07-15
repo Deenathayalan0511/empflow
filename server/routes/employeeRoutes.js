@@ -8,15 +8,25 @@ import {
     filterEmployees
 } from "../controllers/employeeController.js";
 
+import upload from "../middleware/upload.js";
+
 const router = express.Router();
 
 router.get("/", fetchEmployees);
 
 router.get("/filter", filterEmployees);
 
-router.post("/", createEmployee);
+router.post(
+    "/",
+    upload.single("image"),
+    createEmployee
+);
 
-router.put("/:id", editEmployee);
+router.put(
+    "/:id",
+    upload.single("image"),
+    editEmployee
+);
 
 router.delete("/:id", removeEmployee);
 
