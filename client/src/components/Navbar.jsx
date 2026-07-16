@@ -22,6 +22,12 @@ function Navbar() {
             <i className="bi bi-funnel-fill me-2"></i>
             Filter
           </NavLink>
+
+          <NavLink className="nav-link" to="/dashboard">
+            
+            <i class="bi bi-bar-chart-line me-2"></i>
+            Dashboard
+          </NavLink>
         </div>
       </div>
     </nav>

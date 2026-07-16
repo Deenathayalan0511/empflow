@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import WorkingPage from "./pages/WorkingPage";
 import FilterPage from "./pages/FilterPage";
 import EmployeeDetails from "./pages/EmployeeDetails";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Route path="/filter" element={<FilterPage />} />
 
         <Route path="/employee/:id" element={<EmployeeDetails />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );
