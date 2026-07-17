@@ -1,8 +1,40 @@
 import avatar from "../assets/avatar.png";
 import { Link } from "react-router-dom";
+
+import exportPDF from "../utils/exportPDF";
+import exportExcel from "../utils/exportExcel";
+import exportWord from "../utils/exportWord";
+import printEmployees from "../utils/printEmployee";
+
 function EmployeeList({ employees, setEditing, removeEmployee }) {
   return (
     <div className="card shadow">
+      <div className="mb-3 d-flex flex-wrap gap-2 justify-content-around mt-3">
+        <button className="btn btn-danger" onClick={() => exportPDF(employees)}>
+          <i className="bi bi-file-earmark-pdf-fill"></i> PDF
+        </button>
+
+        <button
+          className="btn btn-success"
+          onClick={() => exportExcel(employees)}
+        >
+          <i className="bi bi-file-earmark-excel-fill"></i> Excel
+        </button>
+
+        <button
+          className="btn btn-primary"
+          onClick={() => exportWord(employees)}
+        >
+          <i className="bi bi-file-earmark-word-fill"></i> Word
+        </button>
+
+        <button
+          className="btn btn-secondary"
+          onClick={() => printEmployees(employees)}
+        >
+          <i className="bi bi-printer-fill"></i> Print
+        </button>
+      </div>
       <div className="card-header bg-dark text-white">
         <h4 className="mb-0">Employee List</h4>
       </div>
