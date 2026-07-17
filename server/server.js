@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import employeeRoutes from "./routes/employeeRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 import path from "path";
 
@@ -20,6 +21,8 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/api/employees", employeeRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+
+app.use("/api/ai", aiRoutes);
 
 app.get("/", (req, res) => {
   res.send("Employee Management API Running");

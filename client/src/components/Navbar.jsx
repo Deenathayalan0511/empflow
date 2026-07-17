@@ -24,9 +24,13 @@ function Navbar() {
           </NavLink>
 
           <NavLink className="nav-link" to="/dashboard">
-            
             <i class="bi bi-bar-chart-line me-2"></i>
             Dashboard
+          </NavLink>
+
+          <NavLink to="/ai-report" className="nav-link">
+          <i class="bi bi-filetype-ai me-2 "></i>
+             AI Report
           </NavLink>
         </div>
       </div>

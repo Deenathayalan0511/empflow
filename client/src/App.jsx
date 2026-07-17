@@ -7,6 +7,7 @@ import WorkingPage from "./pages/WorkingPage";
 import FilterPage from "./pages/FilterPage";
 import EmployeeDetails from "./pages/EmployeeDetails";
 import Dashboard from "./pages/Dashboard";
+import AIReportPage from "./pages/AIReportPage";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         <Route path="/employee/:id" element={<EmployeeDetails />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/ai-report" element={<AIReportPage />} />
       </Routes>
     </>
   );
