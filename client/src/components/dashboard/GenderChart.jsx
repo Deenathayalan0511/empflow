@@ -1,10 +1,21 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+} from "chart.js";
 
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Doughnut } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
-ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartDataLabels
+);
 
 function GenderChart({ overall }) {
   const data = {
@@ -18,13 +29,17 @@ function GenderChart({ overall }) {
           overall.otherEmployees,
         ],
 
-        backgroundColor: ["#0d6efd", "#e83e8c", "#6c757d"],
+        backgroundColor: [
+          "#0d6efd",
+          "#e83e8c",
+          "#6c757d",
+        ],
 
         borderColor: "#ffffff",
 
         borderWidth: 3,
 
-        hoverOffset: 35,
+        hoverOffset: 15,
 
         cutout: "65%",
       },
@@ -35,26 +50,6 @@ function GenderChart({ overall }) {
     responsive: true,
 
     maintainAspectRatio: false,
-    plugins: {
-      datalabels: {
-        color: "#212529",
-
-        font: {
-          weight: "bold",
-
-          size: 14,
-        },
-
-        formatter: (value, context) => {
-          const total = context.chart.data.datasets[0].data.reduce(
-            (a, b) => a + b,
-            0,
-          );
-
-          return ((value / total) * 100).toFixed(1) + "%";
-        },
-      },
-    },
 
     plugins: {
       title: {
@@ -62,10 +57,8 @@ function GenderChart({ overall }) {
 
         text: "Gender Distribution",
 
-        color: "#212529",
-
         font: {
-          size: 20,
+          size: 18,
           weight: "bold",
         },
       },
@@ -74,26 +67,81 @@ function GenderChart({ overall }) {
         position: "bottom",
 
         labels: {
-          color: "#212529",
-
-          font: {
-            size: 14,
-            weight: "bold",
-          },
-
-          padding: 20,
-
           usePointStyle: true,
 
           pointStyle: "circle",
+
+          padding: 20,
+
+          font: {
+            size: 13,
+            weight: "bold",
+          },
+        },
+      },
+
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const value = context.raw;
+
+            const total = context.dataset.data.reduce(
+              (a, b) => a + b,
+              0
+            );
+
+            const percentage = (
+              (value / total) *
+              100
+            ).toFixed(1);
+
+            return `${context.label}: ${value} Employees (${percentage}%)`;
+          },
+        },
+      },
+
+      datalabels: {
+        color: "#ffffff",
+
+        font: {
+          weight: "bold",
+          size: 14,
+        },
+
+        formatter: (value, context) => {
+          const total = context.chart.data.datasets[0].data.reduce(
+            (a, b) => a + b,
+            0
+          );
+
+          return (
+            ((value / total) * 100).toFixed(1) + "%"
+          );
         },
       },
     },
   };
 
   return (
-    <div style={{ height: "400px" }}>
-      <Doughnut data={data} options={options} />
+    <div className="card shadow-sm border-0 h-100">
+
+      <div className="card-header bg-white">
+        <h5 className="fw-bold mb-0 text-primary">
+          <i className="bi bi-pie-chart-fill me-2"></i>
+          Gender Distribution
+        </h5>
+      </div>
+
+      <div
+        className="card-body"
+        style={{ height: "420px" }}
+      >
+        <Doughnut
+          data={data}
+          options={options}
+        />
+      </div>
+
     </div>
   );
 }

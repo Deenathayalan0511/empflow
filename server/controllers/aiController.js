@@ -5,61 +5,47 @@ import {
 
 import { generateAIReport } from "../services/geminiService.js";
 
-export const getAIReport = (req, res) => {
-  getDashboardStats(async (err, dashboardResult) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        message: err.message,
-      });
-    }
+// =====================================
+// GET AI REPORT
+// =====================================
+export const getAIReport = async (req, res) => {
+  try {
+    // Get logged-in user's dashboard data
+    const overall = await getDashboardStats(req.user.userId);
 
-    getDepartmentStats(async (err, departmentResult) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: err.message,
-        });
-      }
+    const departments = await getDepartmentStats(req.user.userId);
 
-      try {
-        const overall = dashboardResult[0];
+    // Send data to Gemini
+    const aiResponse = await generateAIReport(overall, departments);
 
-        const departments = departmentResult;
+    // Clean Gemini JSON response
+    const cleanResponse = aiResponse
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
-        const aiResponse = await generateAIReport(overall, departments);
+    const report = JSON.parse(cleanResponse);
 
-        // Remove ```json and ``` if Gemini returns them
-        const cleanResponse = aiResponse
-          .replace(/```json/g, "")
-          .replace(/```/g, "")
-          .trim();
+    const now = new Date();
 
-        const report = JSON.parse(cleanResponse);
+    res.status(200).json({
+      success: true,
 
-        const now = new Date();
+      generatedAt: now.toISOString(),
 
-        res.json({
-          success: true,
+      generatedAtDisplay: now.toLocaleString("en-IN", {
+        dateStyle: "full",
+        timeStyle: "medium",
+        timeZone: "Asia/Kolkata",
+      }),
 
-          generatedAt: now.toISOString(),
-
-          generatedAtDisplay: now.toLocaleString("en-IN", {
-            dateStyle: "full",
-
-            timeStyle: "medium",
-
-            timeZone: "Asia/Kolkata",
-          }),
-
-          report,
-        });
-      } catch (error) {
-        res.status(500).json({
-          success: false,
-          message: error.message,
-        });
-      }
+      report,
     });
-  });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
 };

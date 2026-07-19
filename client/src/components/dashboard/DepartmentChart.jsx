@@ -5,20 +5,31 @@ import {
   BarElement,
   Tooltip,
   Legend,
+  Title,
 } from "chart.js";
 
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartDataLabels,
+);
 
 function DepartmentChart({ departments }) {
   const data = {
-    labels: departments.map((d) => d.department),
+    labels: departments.map((dept) => dept.department),
 
     datasets: [
       {
         label: "Employees",
-        data: departments.map((d) => d.totalEmployees),
+
+        data: departments.map((dept) => dept.totalEmployees),
 
         backgroundColor: [
           "#0d6efd",
@@ -31,91 +42,98 @@ function DepartmentChart({ departments }) {
           "#0dcaf0",
         ],
 
-        borderColor: [
-          "#0a58ca",
-          "#146c43",
-          "#b02a37",
-          "#ffca2c",
-          "#59359a",
-          "#ca6510",
-          "#198754",
-          "#087990",
-        ],
+        borderRadius: 10,
 
-        borderWidth: 2,
+        borderSkipped: false,
 
-        borderRadius: 8,
+        maxBarThickness: 55,
       },
     ],
   };
+
   const options = {
     responsive: true,
 
+    maintainAspectRatio: false,
+
     plugins: {
-      legend: {
-        position: "top",
-
-        labels: {
-          color: "#212529",
-
-          font: {
-            size: 14,
-
-            weight: "bold",
-          },
-        },
-      },
-
       title: {
         display: true,
 
-        text: "Department Employees",
-
-        color: "#212529",
+        text: "Employees by Department",
 
         font: {
           size: 18,
-
           weight: "bold",
+        },
+      },
+
+      legend: {
+        display: false,
+      },
+
+      tooltip: {
+        backgroundColor: "#212529",
+
+        titleColor: "#fff",
+
+        bodyColor: "#fff",
+
+        padding: 12,
+      },
+
+      datalabels: {
+        anchor: "end",
+
+        align: "top",
+
+        color: "#000",
+
+        font: {
+          weight: "bold",
+          size: 13,
         },
       },
     },
 
     scales: {
       x: {
+        grid: {
+          display: false,
+        },
+
         ticks: {
-          color: "#212529",
-
           font: {
-            size: 13,
-
             weight: "bold",
           },
         },
       },
 
       y: {
+        beginAtZero: true,
+
         ticks: {
-          color: "#212529",
+          precision: 0,
+        },
 
-          font: {
-            size: 13,
-
-            weight: "bold",
-          },
+        grid: {
+          color: "#e9ecef",
         },
       },
     },
   };
 
   return (
-    <div className="card shadow mt-4 " style={{ height: "400px" }}>
-      <div className="card-header">
-        <h5>Department-wise Employees</h5>
+    <div className="card shadow-sm border-0 h-100">
+      <div className="card-header bg-white">
+        <h5 className="fw-bold mb-0 text-primary">
+          <i className="bi bi-bar-chart-fill me-2"></i>
+          Department Employees
+        </h5>
       </div>
 
-      <div className="card-body">
-        <Bar data={data} options={options}/>
+      <div className="card-body" style={{ height: "420px" }}>
+        <Bar data={data} options={options} />
       </div>
     </div>
   );

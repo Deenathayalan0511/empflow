@@ -5,74 +5,89 @@ const ai = new GoogleGenAI({
 });
 
 export const generateAIReport = async (overall, departments) => {
-  const prompt = `
+  try {
+    const prompt = `
 
-You are an HR Analytics AI.
+You are an HR Analytics AI assistant.
 
-Analyze the following workforce statistics.
+Analyze the employee workforce data.
 
 Overall Statistics:
 
 ${JSON.stringify(overall, null, 2)}
 
+
 Department Statistics:
 
 ${JSON.stringify(departments, null, 2)}
 
-Generate ONLY valid JSON.
 
-Do not add markdown.
+Return ONLY valid JSON.
 
+Do not use markdown.
 Do not add explanation.
 
-Return exactly this structure:
+
+Return this structure:
 
 {
-  "healthScore": 95,
-  "healthStatus": "Excellent",
+    "healthScore": 95,
 
-  "executiveSummary":[
-    "...",
-    "..."
-  ],
+    "healthStatus": "Excellent",
 
-  "keyInsights":[
-    "...",
-    "..."
-  ],
+    "executiveSummary": [
+        "point 1",
+        "point 2",
+        "point 3"
+    ],
 
-  "risks":[
-    "...",
-    "..."
-  ],
+    "keyInsights": [
+        "point 1",
+        "point 2",
+        "point 3"
+    ],
 
-  "recommendations":[
-    "...",
-    "..."
-  ]
+    "risks": [
+        "point 1",
+        "point 2",
+        "point 3"
+    ],
+
+    "recommendations": [
+        "point 1",
+        "point 2",
+        "point 3"
+    ]
 }
 
-Health Score Rules:
 
-95-100 = Excellent
+Health Score:
 
-80-94 = Good
+95-100 Excellent
 
-60-79 = Fair
+80-94 Good
 
-40-59 = Needs Attention
+60-79 Fair
 
-Below 40 = Critical
+40-59 Needs Attention
 
-Generate 3-5 points for each section.
+0-39 Critical
+
+
+Generate 3-5 points in every section.
 
 `;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-flash-latest",
+    const response = await ai.models.generateContent({
+      model: "gemini-flash-latest",
 
-    contents: prompt,
-  });
+      contents: prompt,
+    });
 
-  return response.text;
+    return response.text;
+  } catch (error) {
+    console.log("Gemini Error:", error.message);
+
+    throw error;
+  }
 };

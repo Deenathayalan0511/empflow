@@ -3,30 +3,27 @@ import {
   getDepartmentStats,
 } from "../models/dashboardModel.js";
 
-export const fetchDashboard = (req, res) => {
-  getDashboardStats((err, dashboardResult) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        message: err.message,
-      });
-    }
+// =====================================
+// GET DASHBOARD DATA
+// =====================================
+export const fetchDashboard = async (req, res) => {
+  try {
+    const overall = await getDashboardStats(req.user.userId);
 
-    getDepartmentStats((err, departmentResult) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: err.message,
-        });
-      }
+    const departments = await getDepartmentStats(req.user.userId);
 
-      res.json({
-        success: true,
+    res.status(200).json({
+      success: true,
 
-        overall: dashboardResult[0],
+      overall,
 
-        departments: departmentResult,
-      });
+      departments,
     });
-  });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
 };

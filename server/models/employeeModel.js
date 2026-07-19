@@ -1,97 +1,176 @@
 import db from "../config/db.js";
 
+// ===========================================
 // Get All Employees
-export const getEmployees = (callback) => {
+// ===========================================
+export const getEmployees = async (userId) => {
+  const sql = `
+        SELECT *
+        FROM employees
+        WHERE user_id = ?
+        ORDER BY id DESC
+    `;
 
-    const sql = "SELECT * FROM employees ORDER BY id DESC";
+  const [rows] = await db.query(sql, [userId]);
 
-    db.query(sql, callback);
-
+  return rows;
 };
 
-//Get Employee by their id
+// ===========================================
 // Get Employee By ID
-export const getEmployeeById = (id, callback) => {
-
-    const sql = `
+// ===========================================
+export const getEmployeeById = async (id, userId) => {
+  const sql = `
         SELECT *
         FROM employees
         WHERE id = ?
+        AND user_id = ?
     `;
 
-    db.query(sql, [id], callback);
+  const [rows] = await db.query(sql, [id, userId]);
 
+  return rows;
 };
 
-// filter employees 
-export const getFilteredEmployees = (
+// ===========================================
+// Add Employee
+// ===========================================
+export const addEmployee = async (employee) => {
+  const sql = `
+        INSERT INTO employees
+        (
+            name,
+            age,
+            gender,
+            email,
+            department,
+            salary,
+            image,
+            user_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    search,
-    column,
-    department,
-    gender,
-    sortBy,
-    order,
-    page,
-    limit,
-    callback
+  const [result] = await db.query(sql, [
+    employee.name,
+    employee.age,
+    employee.gender,
+    employee.email,
+    employee.department,
+    employee.salary,
+    employee.image,
+    employee.user_id,
+  ]);
 
+  return result;
+};
+// ===========================================
+// Update Employee
+// ===========================================
+export const updateEmployee = async (id, userId, employee) => {
+  const sql = `
+        UPDATE employees
+        SET
+            name = ?,
+            age = ?,
+            gender = ?,
+            email = ?,
+            department = ?,
+            salary = ?,
+            image = ?
+        WHERE id = ?
+        AND user_id = ?
+    `;
+
+  const [result] = await db.query(sql, [
+    employee.name,
+    employee.age,
+    employee.gender,
+    employee.email,
+    employee.department,
+    employee.salary,
+    employee.image,
+    id,
+    userId,
+  ]);
+
+  return result;
+};
+
+// ===========================================
+// Delete Employee
+// ===========================================
+export const deleteEmployee = async (id, userId) => {
+  const sql = `
+        DELETE FROM employees
+        WHERE id = ?
+        AND user_id = ?
+    `;
+
+  const [result] = await db.query(sql, [id, userId]);
+
+  return result;
+};
+
+// ===========================================
+// Filter Employees
+// ===========================================
+export const getFilteredEmployees = async (
+  userId,
+  search,
+  column,
+  department,
+  gender,
+  sortBy,
+  order,
+  page,
+  limit,
 ) => {
+  const allowedColumns = [
+    "id",
+    "name",
+    "email",
+    "age",
+    "gender",
+    "department",
+    "salary",
+  ];
 
-    const allowedColumns = [
-        "id",
-        "name",
-        "email",
-        "age",
-        "gender",
-        "department",
-        "salary"
-    ];
+  if (!allowedColumns.includes(column)) {
+    column = "name";
+  }
 
-    if (!allowedColumns.includes(column)) {
-        column = "name";
-    }
+  if (!allowedColumns.includes(sortBy)) {
+    sortBy = "id";
+  }
 
-    if (!allowedColumns.includes(sortBy)) {
-        sortBy = "id";
-    }
+  order = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
 
-    order = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
+  let where = "WHERE user_id = ?";
 
-    let where = "WHERE 1=1";
+  const values = [userId];
 
-    const values = [];
+  // Search
+  if (search) {
+    where += ` AND ${column} LIKE ?`;
+    values.push(`%${search}%`);
+  }
 
-    // Search
-    if (search) {
+  // Department
+  if (department) {
+    where += " AND department = ?";
+    values.push(department);
+  }
 
-        where += ` AND ${column} LIKE ?`;
+  // Gender
+  if (gender) {
+    where += " AND gender = ?";
+    values.push(gender);
+  }
 
-        values.push(`%${search}%`);
+  const offset = (page - 1) * limit;
 
-    }
-
-    // Department
-    if (department) {
-
-        where += " AND department = ?";
-
-        values.push(department);
-
-    }
-
-    // Gender
-    if (gender) {
-
-        where += " AND gender = ?";
-
-        values.push(gender);
-
-    }
-
-    const offset = (page - 1) * limit;
-
-    const sql = `
+  const sql = `
         SELECT *
         FROM employees
         ${where}
@@ -99,110 +178,25 @@ export const getFilteredEmployees = (
         LIMIT ? OFFSET ?
     `;
 
-    const countSql = `
+  const countSql = `
         SELECT COUNT(*) AS total
         FROM employees
         ${where}
     `;
 
-    db.query(countSql, values, (err, countResult) => {
+  // Total Count
+  const [countRows] = await db.query(countSql, values);
 
-        if (err) {
+  const total = countRows[0].total;
 
-            return callback(err);
+  // Employee Data
+  const [rows] = await db.query(sql, [...values, limit, offset]);
 
-        }
-
-        const total = countResult[0].total;
-
-        db.query(
-            sql,
-            [...values, limit, offset],
-            (err, rows) => {
-
-                if (err) {
-
-                    return callback(err);
-
-                }
-
-                callback(null, {
-                    success: true,
-                    data: rows,
-                    currentPage: page,
-                    totalPages: Math.ceil(total / limit),
-                    totalEmployees: total
-                });
-
-            }
-        );
-
-    });
-
-};
-
-// Add Employee
-export const addEmployee = (employee, callback) => {
-
-    const sql = `
-        INSERT INTO employees
-        (name, age, gender, email, department, salary, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    db.query(
-        sql,
-        [
-            employee.name,
-            employee.age,
-            employee.gender,
-            employee.email,
-            employee.department,
-            employee.salary,
-            employee.image
-        ],
-        callback
-    );
-
-};
-// Update Employee
-export const updateEmployee = (id, employee, callback) => {
-
-    const sql = `
-        UPDATE employees
-        SET
-            name=?,
-            age=?,
-            gender=?,
-            email=?,
-            department=?,
-            salary=?,
-            image=?
-        WHERE id=?
-    `;
-
-    db.query(
-        sql,
-        [
-            employee.name,
-            employee.age,
-            employee.gender,
-            employee.email,
-            employee.department,
-            employee.salary,
-            employee.image,
-            id
-        ],
-        callback
-    );
-
-};
-
-// Delete Employee
-export const deleteEmployee = (id, callback) => {
-
-    const sql = "DELETE FROM employees WHERE id=?";
-
-    db.query(sql, [id], callback);
-
+  return {
+    success: true,
+    data: rows,
+    currentPage: page,
+    totalPages: Math.ceil(total / limit),
+    totalEmployees: total,
+  };
 };

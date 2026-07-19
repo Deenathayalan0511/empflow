@@ -1,6 +1,9 @@
 import db from "../config/db.js";
 
-export const getDashboardStats = (callback) => {
+// =====================================
+// Overall Dashboard Statistics
+// =====================================
+export const getDashboardStats = async (userId) => {
   const sql = `
         SELECT
 
@@ -25,14 +28,20 @@ export const getDashboardStats = (callback) => {
             MIN(salary) AS lowestSalary
 
         FROM employees
+
+        WHERE user_id = ?
     `;
 
-  db.query(sql, callback);
+  const [rows] = await db.query(sql, [userId]);
+
+  return rows[0];
 };
 
-export const getDepartmentStats = (callback) => {
+// =====================================
+// Department Wise Statistics
+// =====================================
+export const getDepartmentStats = async (userId) => {
   const sql = `
-
         SELECT
 
             department,
@@ -57,13 +66,20 @@ export const getDepartmentStats = (callback) => {
 
             MIN(salary) AS lowestSalary
 
+
         FROM employees
+
+
+        WHERE user_id = ?
+
 
         GROUP BY department
 
-        ORDER BY department
 
+        ORDER BY department
     `;
 
-  db.query(sql, callback);
+  const [rows] = await db.query(sql, [userId]);
+
+  return rows;
 };

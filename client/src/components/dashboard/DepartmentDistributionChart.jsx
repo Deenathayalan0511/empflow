@@ -1,8 +1,21 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+} from "chart.js";
 
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Doughnut } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartDataLabels
+);
 
 function DepartmentDistributionChart({ departments }) {
   const data = {
@@ -31,9 +44,9 @@ function DepartmentDistributionChart({ departments }) {
 
         borderWidth: 3,
 
-        hoverOffset: 35,
+        hoverOffset: 20,
 
-        cutout: "60%",
+        cutout: "65%",
       },
     ],
   };
@@ -49,11 +62,8 @@ function DepartmentDistributionChart({ departments }) {
 
         text: "Employee Distribution by Department",
 
-        color: "#212529",
-
         font: {
           size: 18,
-
           weight: "bold",
         },
       },
@@ -62,29 +72,82 @@ function DepartmentDistributionChart({ departments }) {
         position: "right",
 
         labels: {
-          color: "#212529",
-
-          font: {
-            size: 13,
-
-            weight: "bold",
-          },
-
           usePointStyle: true,
 
           pointStyle: "circle",
 
-          padding: 20,
+          padding: 18,
+
+          font: {
+            size: 13,
+            weight: "bold",
+          },
+        },
+      },
+
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const value = context.raw;
+
+            const total = context.dataset.data.reduce(
+              (a, b) => a + b,
+              0
+            );
+
+            const percentage = (
+              (value / total) *
+              100
+            ).toFixed(1);
+
+            return `${context.label}: ${value} Employees (${percentage}%)`;
+          },
+        },
+      },
+
+      datalabels: {
+        color: "#fff",
+
+        font: {
+          weight: "bold",
+          size: 13,
+        },
+
+        formatter: (value, context) => {
+          const total =
+            context.chart.data.datasets[0].data.reduce(
+              (a, b) => a + b,
+              0
+            );
+
+          return (
+            ((value / total) * 100).toFixed(1) + "%"
+          );
         },
       },
     },
   };
 
   return (
-    <div className="card shadow border-0 mt-4" style={{ height: "400px" }}>
-      <div className="card-body">
-        <Doughnut data={data} options={options} />
+    <div className="card shadow-sm border-0 h-100">
+
+      <div className="card-header bg-white">
+        <h5 className="fw-bold mb-0 text-primary">
+          <i className="bi bi-pie-chart-fill me-2"></i>
+          Department Distribution
+        </h5>
       </div>
+
+      <div
+        className="card-body"
+        style={{ height: "420px" }}
+      >
+        <Doughnut
+          data={data}
+          options={options}
+        />
+      </div>
+
     </div>
   );
 }

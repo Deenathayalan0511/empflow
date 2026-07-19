@@ -10,19 +10,30 @@ import {
 } from "../controllers/employeeController.js";
 
 import upload from "../middleware/upload.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", fetchEmployees);
+router.get("/", authMiddleware, fetchEmployees);
 
-router.get("/filter", filterEmployees);
+router.get("/filter", authMiddleware, filterEmployees);
 
-router.get("/:id", fetchEmployeeById);
+router.get("/:id", authMiddleware, fetchEmployeeById);
 
-router.post("/", upload.single("image"), createEmployee);
+router.post(
+  "/",
+  authMiddleware,
+  upload.single("image"),
+  createEmployee
+);
 
-router.put("/:id", upload.single("image"), editEmployee);
+router.put(
+  "/:id",
+  authMiddleware,
+  upload.single("image"),
+  editEmployee
+);
 
-router.delete("/:id", removeEmployee);
+router.delete("/:id", authMiddleware, removeEmployee);
 
 export default router;

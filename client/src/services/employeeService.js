@@ -1,18 +1,24 @@
-import axios from "axios";
+import api from "./api";
 
-const API = "http://localhost:5000/api/employees";
+const API = "/employees";
 
-// Get Employees
+// ===============================
+// Get All Employees
+// ===============================
 export const getEmployees = () => {
-  return axios.get(API);
+  return api.get(API);
 };
 
+// ===============================
 // Get Employee By ID
+// ===============================
 export const getEmployeeById = (id) => {
-  return axios.get(`${API}/${id}`);
+  return api.get(`${API}/${id}`);
 };
 
+// ===============================
 // Create Employee
+// ===============================
 export const createEmployee = (employee) => {
   const formData = new FormData();
 
@@ -27,14 +33,16 @@ export const createEmployee = (employee) => {
     formData.append("image", employee.image);
   }
 
-  return axios.post(API, formData, {
+  return api.post(API, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 };
 
+// ===============================
 // Update Employee
+// ===============================
 export const updateEmployee = (id, employee) => {
   const formData = new FormData();
 
@@ -47,23 +55,27 @@ export const updateEmployee = (id, employee) => {
 
   if (employee.image instanceof File) {
     formData.append("image", employee.image);
-  } else {
-    formData.append("image", employee.image || "");
+  } else if (employee.image) {
+    formData.append("image", employee.image);
   }
 
-  return axios.put(`${API}/${id}`, formData, {
+  return api.put(`${API}/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 };
 
+// ===============================
 // Delete Employee
+// ===============================
 export const deleteEmployee = (id) => {
-  return axios.delete(`${API}/${id}`);
+  return api.delete(`${API}/${id}`);
 };
 
+// ===============================
 // Filter Employees
+// ===============================
 export const filterEmployees = (
   search,
   column,
@@ -74,7 +86,7 @@ export const filterEmployees = (
   page,
   limit,
 ) => {
-  return axios.get(`${API}/filter`, {
+  return api.get(`${API}/filter`, {
     params: {
       search,
       column,

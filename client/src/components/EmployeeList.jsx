@@ -8,132 +8,188 @@ import printEmployees from "../utils/printEmployee";
 
 function EmployeeList({ employees, setEditing, removeEmployee }) {
   return (
-    <div className="card shadow">
-      <div className="mb-3 d-flex flex-wrap gap-2 justify-content-around mt-3">
-        <button className="btn btn-danger" onClick={() => exportPDF(employees)}>
-          <i className="bi bi-file-earmark-pdf-fill"></i> PDF
-        </button>
+    <div className="card shadow-lg border-0 rounded-4">
+      {/* Header */}
 
-        <button
-          className="btn btn-success"
-          onClick={() => exportExcel(employees)}
-        >
-          <i className="bi bi-file-earmark-excel-fill"></i> Excel
-        </button>
+      <div className="card-header bg-primary text-white">
+        <div className="d-flex justify-content-between align-items-center flex-wrap">
+          <h4 className="mb-0">
+            <i className="bi bi-table me-2"></i>
+            Employee List
+          </h4>
 
-        <button
-          className="btn btn-primary"
-          onClick={() => exportWord(employees)}
-        >
-          <i className="bi bi-file-earmark-word-fill"></i> Word
-        </button>
-
-        <button
-          className="btn btn-secondary"
-          onClick={() => printEmployees(employees)}
-        >
-          <i className="bi bi-printer-fill"></i> Print
-        </button>
-      </div>
-      <div className="card-header bg-dark text-white">
-        <h4 className="mb-0">Employee List</h4>
+          <span className="badge bg-light text-dark fs-6">
+            {employees.length} Employees
+          </span>
+        </div>
       </div>
 
-      <div className="card-body">
+      {/* Export Buttons */}
+
+      <div className="card-body border-bottom">
+        <div className="d-flex flex-wrap gap-2">
+          <button
+            className="btn btn-danger"
+            onClick={() => exportPDF(employees)}
+          >
+            <i className="bi bi-file-earmark-pdf-fill me-2"></i>
+            PDF
+          </button>
+
+          <button
+            className="btn btn-success"
+            onClick={() => exportExcel(employees)}
+          >
+            <i className="bi bi-file-earmark-excel-fill me-2"></i>
+            Excel
+          </button>
+
+          <button
+            className="btn btn-primary"
+            onClick={() => exportWord(employees)}
+          >
+            <i className="bi bi-file-earmark-word-fill me-2"></i>
+            Word
+          </button>
+
+          <button
+            className="btn btn-secondary"
+            onClick={() => printEmployees(employees)}
+          >
+            <i className="bi bi-printer-fill me-2"></i>
+            Print
+          </button>
+        </div>
+      </div>
+
+      {/* Employee Table */}
+
+      <div className="table-responsive">
         {employees.length === 0 ? (
-          <div className="alert alert-warning text-center">
-            No Employees Found
+          <div className="text-center p-5">
+            <i className="bi bi-people display-1 text-secondary"></i>
+
+            <h4 className="mt-3">No Employees Found</h4>
+
+            <p className="text-muted">
+              Add your first employee to get started.
+            </p>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table className="table table-bordered table-hover align-middle">
-              <thead className="table-primary">
-                <tr>
-                  <th>ID</th>
-                  <th>Photo</th>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Gender</th>
-                  <th>Email</th>
-                  <th>Department</th>
-                  <th>Salary</th>
-                  <th width="180">Action</th>
-                </tr>
-              </thead>
+          <table className="table table-hover table-striped align-middle mb-0">
+            <thead className="table-dark">
+              <tr>
+                <th>ID</th>
 
-              <tbody>
-                {employees.map((employee) => (
-                  <tr key={employee.id}>
-                    <td>{employee.id}</td>
+                <th>Photo</th>
 
-                    <td>
-                      {employee.image ? (
-                        <img
-                          src={`http://localhost:5000/uploads/${employee.image}`}
-                          alt={employee.name}
-                          width="60"
-                          height="60"
-                          className="rounded-circle border"
-                          style={{
-                            objectFit: "cover",
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={avatar}
-                          alt="No Image"
-                          width="60"
-                          height="60"
-                          className="rounded-circle border"
-                        />
-                      )}
-                    </td>
+                <th>Name</th>
 
-                    <td>{employee.name}</td>
+                <th>Age</th>
 
-                    <td>{employee.age}</td>
+                <th>Gender</th>
 
-                    <td>
-                      <span className="badge bg-info">{employee.gender}</span>
-                    </td>
+                <th>Email</th>
 
-                    <td>{employee.email}</td>
+                <th>Department</th>
 
-                    <td>
-                      <span className="badge bg-success">
-                        {employee.department}
-                      </span>
-                    </td>
+                <th>Salary</th>
 
-                    <td>₹ {Number(employee.salary).toLocaleString()}</td>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
 
-                    <td>
+            <tbody>
+              {employees.map((employee) => (
+                <tr key={employee.id}>
+                  <td>
+                    <strong>{employee.id}</strong>
+                  </td>
+
+                  <td>
+                    {employee.image ? (
+                      <img
+                        src={`http://localhost:5000/uploads/${employee.image}`}
+                        alt={employee.name}
+                        width="60"
+                        height="60"
+                        className="rounded-circle border border-2 border-primary"
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={avatar}
+                        alt="Avatar"
+                        width="60"
+                        height="60"
+                        className="rounded-circle border"
+                      />
+                    )}
+                  </td>
+
+                  <td className="fw-semibold">{employee.name}</td>
+
+                  <td>{employee.age}</td>
+
+                  <td>
+                    <span
+                      className={`badge ${
+                        employee.gender === "Male"
+                          ? "bg-primary"
+                          : employee.gender === "Female"
+                            ? "bg-danger"
+                            : "bg-secondary"
+                      }`}
+                    >
+                      {employee.gender}
+                    </span>
+                  </td>
+
+                  <td>{employee.email}</td>
+
+                  <td>
+                    <span className="badge bg-success">
+                      {employee.department}
+                    </span>
+                  </td>
+
+                  <td className="fw-bold text-success">
+                    ₹ {Number(employee.salary).toLocaleString()}
+                  </td>
+
+                  <td>
+                    <div className="d-flex justify-content-center gap-2">
                       <Link
                         to={`/employee/${employee.id}`}
-                        className="btn btn-primary btn-sm me-2 mb-1"
+                        className="btn btn-primary btn-sm"
+                        title="View"
                       >
-                        View
+                        <i className="bi bi-eye-fill"></i>
                       </Link>
 
                       <button
-                        className="btn btn-warning btn-sm me-2 mb-1"
+                        className="btn btn-warning btn-sm"
+                        title="Edit"
                         onClick={() => setEditing(employee)}
                       >
-                        Edit
+                        <i className="bi bi-pencil-fill"></i>
                       </button>
 
                       <button
                         className="btn btn-danger btn-sm"
-                        onClick={() => removeEmployee(employee.id)}
+                        title="Delete"
+                        onClick={() => removeEmployee(employee)}
                       >
-                        Delete
+                        <i className="bi bi-trash-fill"></i>
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

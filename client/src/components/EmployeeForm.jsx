@@ -157,144 +157,249 @@ function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
   };
 
   return (
-    <div className="card shadow">
-      <div className="card-header bg-primary text-white">
-        <h4 className="mb-0">{editing ? "Update Employee" : "Add Employee"}</h4>
-      </div>
+  <div className="card shadow-lg border-0 rounded-4">
 
-      <div className="card-body">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Name</label>
+    <div className="card-header bg-primary text-white rounded-top-4">
+      <h4 className="mb-0">
+        <i
+          className={`bi ${
+            editing
+              ? "bi-pencil-square"
+              : "bi-person-plus-fill"
+          } me-2`}
+        ></i>
 
-            <input
-              type="text"
-              className={`form-control ${errors.name ? "is-invalid" : ""}`}
-              name="name"
-              value={employee.name}
-              onChange={handleChange}
+        {editing ? "Update Employee" : "Add Employee"}
+      </h4>
+    </div>
+
+    <div className="card-body">
+
+      <form onSubmit={handleSubmit}>
+
+        {/* Name */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-person-fill me-2 text-primary"></i>
+            Name
+          </label>
+
+          <input
+            type="text"
+            className={`form-control rounded-3 ${
+              errors.name ? "is-invalid" : ""
+            }`}
+            name="name"
+            value={employee.name}
+            onChange={handleChange}
+          />
+
+          <div className="invalid-feedback">
+            {errors.name}
+          </div>
+        </div>
+
+        {/* Age */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-calendar-event-fill me-2 text-success"></i>
+            Age
+          </label>
+
+          <input
+            type="number"
+            className={`form-control rounded-3 ${
+              errors.age ? "is-invalid" : ""
+            }`}
+            name="age"
+            value={employee.age}
+            onChange={handleChange}
+          />
+
+          <div className="invalid-feedback">
+            {errors.age}
+          </div>
+        </div>
+
+        {/* Gender */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-gender-ambiguous me-2 text-info"></i>
+            Gender
+          </label>
+
+          <select
+            className={`form-select rounded-3 ${
+              errors.gender ? "is-invalid" : ""
+            }`}
+            name="gender"
+            value={employee.gender}
+            onChange={handleChange}
+          >
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+
+          <div className="invalid-feedback">
+            {errors.gender}
+          </div>
+        </div>
+
+        {/* Email */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-envelope-fill me-2 text-danger"></i>
+            Email
+          </label>
+
+          <input
+            type="email"
+            className={`form-control rounded-3 ${
+              errors.email ? "is-invalid" : ""
+            }`}
+            name="email"
+            value={employee.email}
+            onChange={handleChange}
+          />
+
+          <div className="invalid-feedback">
+            {errors.email}
+          </div>
+        </div>
+
+        {/* Department */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-building-fill me-2 text-warning"></i>
+            Department
+          </label>
+
+          <select
+            className={`form-select rounded-3 ${
+              errors.department ? "is-invalid" : ""
+            }`}
+            name="department"
+            value={employee.department}
+            onChange={handleChange}
+          >
+            <option value="">Select Department</option>
+            <option>IT</option>
+            <option>HR</option>
+            <option>Finance</option>
+            <option>Marketing</option>
+            <option>Sales</option>
+            <option>Support</option>
+          </select>
+
+          <div className="invalid-feedback">
+            {errors.department}
+          </div>
+        </div>
+
+        {/* Salary */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-cash-stack me-2 text-success"></i>
+            Salary
+          </label>
+
+          <input
+            type="number"
+            className={`form-control rounded-3 ${
+              errors.salary ? "is-invalid" : ""
+            }`}
+            name="salary"
+            value={employee.salary}
+            onChange={handleChange}
+          />
+
+          <div className="invalid-feedback">
+            {errors.salary}
+          </div>
+        </div>
+
+        {/* Image */}
+
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            <i className="bi bi-image-fill me-2 text-primary"></i>
+            Employee Image
+          </label>
+
+          <input
+            type="file"
+            className="form-control"
+            accept="image/*"
+            name="image"
+            onChange={handleChange}
+          />
+        </div>
+
+        {preview && (
+          <div className="text-center mb-3">
+
+            <img
+              src={preview}
+              alt="Preview"
+              width="130"
+              height="130"
+              className="rounded-circle shadow border border-3 border-primary"
+              style={{
+                objectFit: "cover",
+              }}
             />
 
-            <div className="invalid-feedback">{errors.name}</div>
           </div>
+        )}
 
-          <div className="mb-3">
-            <label className="form-label">Age</label>
-
-            <input
-              type="number"
-              className={`form-control ${errors.age ? "is-invalid" : ""}`}
-              name="age"
-              value={employee.age}
-              onChange={handleChange}
-            />
-
-            <div className="invalid-feedback">{errors.age}</div>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Gender</label>
-
-            <select
-              className={`form-select ${errors.gender ? "is-invalid" : ""}`}
-              name="gender"
-              value={employee.gender}
-              onChange={handleChange}
-            >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <div className="invalid-feedback">{errors.gender}</div>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-
-            <input
-              type="email"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`}
-              name="email"
-              value={employee.email}
-              onChange={handleChange}
-            />
-
-            <div className="invalid-feedback">{errors.email}</div>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Department</label>
-
-            <select
-              className={`form-select ${errors.department ? "is-invalid" : ""}`}
-              name="department"
-              value={employee.department}
-              onChange={handleChange}
-            >
-              <option value="">Select Department</option>
-              <option>IT</option>
-              <option>HR</option>
-              <option>Finance</option>
-              <option>Marketing</option>
-              <option>Sales</option>
-              <option>Support</option>
-            </select>
-
-            <div className="invalid-feedback">{errors.department}</div>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Salary</label>
-
-            <input
-              type="number"
-              className={`form-control ${errors.salary ? "is-invalid" : ""}`}
-              name="salary"
-              value={employee.salary}
-              onChange={handleChange}
-            />
-
-            <div className="invalid-feedback">{errors.salary}</div>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Employee Image</label>
-
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              className="form-control"
-              onChange={handleChange}
-            />
-
-            {preview && (
-              <div className="text-center mt-3">
-                <img
-                  src={preview}
-                  alt="Preview"
-                  width="120"
-                  height="120"
-                  className="rounded-circle border"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-            )}
-          </div>
+        <div className="d-grid gap-2">
 
           <button
             className={
-              editing ? "btn btn-warning w-100" : "btn btn-success w-100"
+              editing
+                ? "btn btn-warning btn-lg"
+                : "btn btn-success btn-lg"
             }
           >
-            {editing ? "Update Employee" : "Add Employee"}
+            <i
+              className={`bi ${
+                editing
+                  ? "bi-pencil-square"
+                  : "bi-person-plus-fill"
+              } me-2`}
+            ></i>
+
+            {editing
+              ? "Update Employee"
+              : "Add Employee"}
           </button>
-        </form>
-      </div>
+
+          {editing && (
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => window.location.reload()}
+            >
+              Cancel
+            </button>
+          )}
+
+        </div>
+
+      </form>
+
     </div>
-  );
+
+  </div>
+);
 }
 
 export default EmployeeForm;

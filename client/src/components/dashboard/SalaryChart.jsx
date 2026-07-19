@@ -5,21 +5,31 @@ import {
   BarElement,
   Tooltip,
   Legend,
+  Title,
 } from "chart.js";
 
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartDataLabels
+);
 
 function SalaryChart({ departments }) {
   const data = {
-    labels: departments.map((d) => d.department),
+    labels: departments.map((dept) => dept.department),
 
     datasets: [
       {
         label: "Average Salary",
 
-        data: departments.map((d) => d.averageSalary),
+        data: departments.map((dept) => dept.averageSalary),
 
         backgroundColor: [
           "#198754",
@@ -32,92 +42,110 @@ function SalaryChart({ departments }) {
           "#0d6efd",
         ],
 
-        borderColor: [
-          "#146c43",
-          "#198754",
-          "#087990",
-          "#520dc2",
-          "#ca6510",
-          "#ffca2c",
-          "#b02a37",
-          "#0a58ca",
-        ],
+        borderRadius: 10,
 
-        borderWidth: 2,
+        borderSkipped: false,
 
-        borderRadius: 8,
+        maxBarThickness: 55,
       },
     ],
   };
+
   const options = {
     responsive: true,
 
+    maintainAspectRatio: false,
+
     plugins: {
+      title: {
+        display: true,
+
+        text: "Average Salary by Department",
+
+        font: {
+          size: 18,
+          weight: "bold",
+        },
+      },
+
       legend: {
-        position: "top",
+        display: false,
+      },
 
-        labels: {
-          color: "#212529",
-
-          font: {
-            size: 14,
-
-            weight: "bold",
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return `₹ ${Number(context.raw).toLocaleString()}`;
           },
         },
       },
 
-      title: {
-        display: true,
+      datalabels: {
+        anchor: "end",
 
-        text: "Department Employees",
+        align: "top",
 
         color: "#212529",
 
         font: {
-          size: 18,
-
           weight: "bold",
+          size: 12,
         },
+
+        formatter: (value) =>
+          "₹" + Number(value).toLocaleString(),
       },
     },
 
     scales: {
       x: {
+        grid: {
+          display: false,
+        },
+
         ticks: {
-          color: "#212529",
-
           font: {
-            size: 13,
-
             weight: "bold",
           },
         },
       },
 
       y: {
+        beginAtZero: true,
+
         ticks: {
-          color: "#212529",
-
-          font: {
-            size: 13,
-
-            weight: "bold",
+          callback: function (value) {
+            return "₹" + Number(value).toLocaleString();
           },
+        },
+
+        grid: {
+          color: "#e9ecef",
         },
       },
     },
   };
 
   return (
-    <div className="card shadow mt-4" style={{ height: "400px" }}>
-      <div className="card-header">
-        <h5>Average Salary by Department</h5>
+    <div className="card shadow-sm border-0 h-100">
+
+      <div className="card-header bg-white">
+        <h5 className="fw-bold mb-0 text-success">
+          <i className="bi bi-cash-stack me-2"></i>
+          Average Salary by Department
+        </h5>
       </div>
 
-      <div className="card-body">
-        <Bar data={data} options={options}/>
+      <div
+        className="card-body"
+        style={{ height: "420px" }}
+      >
+        <Bar
+          data={data}
+          options={options}
+        />
       </div>
+
     </div>
   );
 }
