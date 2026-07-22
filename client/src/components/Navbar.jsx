@@ -38,7 +38,7 @@ function Navbar() {
             <>
               <ul className="navbar-nav mx-auto">
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/">
+                  <NavLink className="nav-link" to="/home">
                     <i className="bi bi-house-door-fill me-2"></i>
                     Home
                   </NavLink>

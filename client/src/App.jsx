@@ -1,13 +1,13 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
+import VerifyEmail from "./pages/VerifyEmail";
 
 import Home from "./pages/Home";
 import WorkingPage from "./pages/WorkingPage";
@@ -16,24 +16,41 @@ import EmployeeDetails from "./pages/EmployeeDetails";
 import Dashboard from "./pages/Dashboard";
 import AIReportPage from "./pages/AIReportPage";
 
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyResetOTP from "./pages/VerifyResetOTP";
+import ResetPassword from "./pages/ResetPassword";
+
 function App() {
   const location = useLocation();
 
-  const hideNavbar =
-    location.pathname === "/login" || location.pathname === "/register";
+  const hideNavbar = [
+    "/",
+    "/login",
+    "/register",
+    "/verify-email",
+    "/forgot-password",
+    "/verify-reset-otp",
+    "/reset-password",
+  ].includes(location.pathname);
+
   return (
     <>
       {!hideNavbar && <Navbar />}
 
       <Routes>
         {/* Public Routes */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-reset-otp" element={<VerifyResetOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
-
         <Route
-          path="/"
+          path="/home"
           element={
             <ProtectedRoute>
               <Home />
@@ -85,14 +102,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Invalid Route */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-       <ToastContainer
+
+      <ToastContainer
         position="top-right"
         autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        pauseOnHover
         theme="colored"
       />
     </>

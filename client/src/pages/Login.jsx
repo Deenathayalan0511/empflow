@@ -30,9 +30,12 @@ function Login() {
 
       toast.success(res.message);
 
-      navigate("/");
+      navigate("/home");
+
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login Failed");
+      toast.error(
+        err.response?.data?.message || "Login Failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -42,9 +45,13 @@ function Login() {
     <div className="container mt-5" style={{ maxWidth: 450 }}>
       <div className="card shadow">
         <div className="card-body">
-          <h2 className="text-center mb-4">Employee Login</h2>
+
+          <h2 className="text-center mb-4">
+            Employee Login
+          </h2>
 
           <form onSubmit={handleSubmit}>
+
             <div className="mb-3">
               <label>Email</label>
 
@@ -71,14 +78,26 @@ function Login() {
               />
             </div>
 
-            <button className="btn btn-primary w-100" disabled={loading}>
+            <div className="text-end mb-3">
+              <Link to="/forgot-password">
+                Forgot Password?
+              </Link>
+            </div>
+
+            <button
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
               {loading ? "Logging in..." : "Login"}
             </button>
+
           </form>
 
           <p className="text-center mt-3">
-            Don't have an account? <Link to="/register">Register</Link>
+            Don't have an account?
+            <Link to="/register"> Register</Link>
           </p>
+
         </div>
       </div>
     </div>
