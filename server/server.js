@@ -16,12 +16,16 @@ const app = express();
 // ===============================
 // CORS CONFIGURATION
 // ===============================
+import cors from "cors";
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // React URL
-
+    origin: [
+      "http://localhost:5173",
+      "https://hr-analytics-plotform.onrender.com", // Replace after deployment
+    ],
     credentials: true,
-  }),
+  })
 );
 
 // ===============================
