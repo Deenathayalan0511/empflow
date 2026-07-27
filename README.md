@@ -5,7 +5,7 @@ A modern Full Stack Employee Management System built with the MERN ecosystem (Re
 
 | Login                            | Register                             |
 | -------------------------------- | ------------------------------------ |
-| ![Login](screenshots/login.jpeg) | ![Register](screenshots/register.jp) |
+| ![Login](screenshots/login.jpeg) | ![Register](screenshots/register.jpeg) |
 
 | Email Verification                      | Forgot Password                    |
 | --------------------------------------- | ---------------------------------- |
@@ -14,13 +14,16 @@ A modern Full Stack Employee Management System built with the MERN ecosystem (Re
 | Home Dashboard                     | Add Employee                             |
 | ---------------------------------- | ---------------------------------------- |
 | ![Home](screenshots/home.jpeg)     | ![Add Employee](screenshots/addemp.jpeg) |
-| Search & Filter                    |
-| ------------------                 |
-| ![Filter](screenshots/filter.jpeg) |
+
 
 | Dashboard                                | AI Workforce Report               |
 | ---------------------------------------- | --------------------------------- |
 | ![Dashboard](screenshots/dashboard.jpeg) | ![AI Report](screenshots/ai.jpeg) |
+
+
+| Search & Filter                    |
+| ---------------------------------  |
+| ![Filter](screenshots/filter.jpeg) |
 
 Login Page
 Dashboard
