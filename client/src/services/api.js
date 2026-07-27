@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: "https://hr-analytics-plotform.onrender.com",
+  baseURL: "https://hr-analytics-plotform.onrender.com/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
