@@ -9,8 +9,8 @@ import {
   fetchEmployeeById,
 } from "../controllers/employeeController.js";
 
-import upload from "../middleware/upload.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import upload from "../Middleware/upload.js";
+import authMiddleware from "../Middleware/authMiddleware.js";
 
 const router = express.Router();
 
