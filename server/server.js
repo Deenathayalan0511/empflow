@@ -23,7 +23,8 @@ app.use(
       "http://localhost:5173",
       "https://empflow-git-main-deenathayalan.vercel.app",
       "https://empflow-deenathayalan.vercel.app",
-      "https://empflow-ck8ljf0q4-deenathayalan.vercel.app", // your production domain
+      "https://empflow-ck8ljf0q4-deenathayalan.vercel.app",
+      "https://empflow-eight.vercel.app", // your production domain
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
