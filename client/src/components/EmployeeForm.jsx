@@ -79,7 +79,7 @@ function EmployeeForm({ initialState, addEmployee, editEmployee, editing }) {
       setEmployee(editing);
 
       if (editing.image) {
-        setPreview(`http://localhost:5000/uploads/${editing.image}`);
+        setPreview(editing.image);
       } else {
         setPreview("");
       }

@@ -109,7 +109,7 @@ function EmployeeList({ employees, setEditing, removeEmployee }) {
                   <td>
                     {employee.image ? (
                       <img
-                        src={`http://localhost:5000/uploads/${employee.image}`}
+                        src={employee.image}
                         alt={employee.name}
                         width="60"
                         height="60"
