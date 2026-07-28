@@ -98,7 +98,7 @@ export const createEmployee = async (req, res) => {
   try {
     const employee = {
       ...req.body,
-      image: req.file ? req.file.filename : null,
+      image: req.file ? req.file.path: null,
       user_id: req.user.userId,
     };
 
@@ -123,7 +123,7 @@ export const editEmployee = async (req, res) => {
   try {
     const employee = {
       ...req.body,
-      image: req.file ? req.file.filename : req.body.image,
+      image: req.file ? req.file.path : req.body.image,
     };
 
     const result = await updateEmployee(

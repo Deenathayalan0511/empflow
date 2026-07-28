@@ -47,7 +47,7 @@ function EmployeeDetails() {
               <div className="text-center mb-4">
                 {employee.image ? (
                   <img
-                    src={`https://hr-analytics-plotform.onrender.com/uploads/${employee.image}`}
+                    src={employee.image}
                     alt={employee.name}
                     width="160"
                     height="160"

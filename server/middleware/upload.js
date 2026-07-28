@@ -1,50 +1,30 @@
 import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 import path from "path";
-import fs from "fs";
 
-// Create uploads folder if not exists
-const uploadDir = "uploads";
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-// Storage Configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-
-  filename: (req, file, cb) => {
-    const uniqueName =
-      Date.now() +
-      "-" +
-      Math.round(Math.random() * 1000000000) +
-      path.extname(file.originalname);
-
-    cb(null, uniqueName);
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "employee-management",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 
-// File Filter
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = [".jpg", ".jpeg", ".png", ".webp"];
+  const allowed = [".jpg", ".jpeg", ".png", ".webp"];
+  const ext = path.extname(file.originalname).toLowerCase();
 
-  const extension = path.extname(file.originalname).toLowerCase();
-
-  if (allowedTypes.includes(extension)) {
+  if (allowed.includes(ext)) {
     cb(null, true);
   } else {
-    cb(new Error("Only JPG, JPEG, PNG and WEBP images are allowed"));
+    cb(new Error("Only JPG, JPEG, PNG and WEBP images are allowed."));
   }
 };
 
-// Multer Configuration
 const upload = multer({
   storage,
-
   fileFilter,
-
   limits: {
     fileSize: 2 * 1024 * 1024,
   },
