@@ -1,4 +1,9 @@
-🚀 Employee Management System
+# 🚀 EmpFlow - HR analytics platform
+
+- 🌐 **Live Demo:** [Open EmpFlow](empflow-eight.vercel.app)
+- 💻 **GitHub:** [Source Code](https://github.com/Deenathayalan0511/empflow)
+
+🚀 EmpFlow
 A modern Full Stack Employee Management System built with the MERN ecosystem (React + Node.js + Express + MySQL). This application helps organizations manage employee records efficiently with secure authentication, AI-powered workforce analytics, dashboard insights, image uploads, email verification, and password recovery.
 
 # 📸 Project Screenshots
