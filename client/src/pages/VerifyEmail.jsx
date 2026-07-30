@@ -17,7 +17,7 @@ const verifyOTP=async()=>{
 try{
 
 await axios.post(
-"http://localhost:5000/api/auth/verify-email",
+"https://hr-analytics-plotform.onrender.com/api/auth/verify-email",
 {
 email,
 otp

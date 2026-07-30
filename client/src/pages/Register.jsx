@@ -45,12 +45,15 @@ function Register() {
         password: form.password,
       });
 
+      console.log(res);
+
       toast.success(res.message);
-
-      localStorage.setItem("verifyEmail", form.email);
-
       setShowOTP(true);
     } catch (err) {
+      console.log(err);
+      console.log(err.response);
+      console.log(err.response?.data);
+
       toast.error(err.response?.data?.message || "Registration Failed");
     } finally {
       setLoading(false);
