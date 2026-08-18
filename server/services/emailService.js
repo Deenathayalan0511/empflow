@@ -1,13 +1,15 @@
-import transporter from "../config/mail.js";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ==========================================
 // Send Verification OTP Email
 // ==========================================
 export const sendVerificationEmail = async (email, name, otp) => {
   try {
-    await transporter.sendMail({
-      from: `"HR Analytics Platform" <${process.env.EMAIL_USER}>`,
-      to: email,
+    const { data, error } = await resend.emails.send({
+      from: "HR Analytics Platform <onboarding@resend.dev>",
+      to: [email],
       subject: "Email Verification OTP - HR Analytics Platform",
 
       html: `
@@ -24,25 +26,22 @@ export const sendVerificationEmail = async (email, name, otp) => {
           </p>
 
           <p>
-            Please use the following One-Time Password (OTP) to verify your email address.
+            Please use the following One-Time Password (OTP)
+            to verify your email address.
           </p>
 
-          <div
-            style="
-              background:#f4f4f4;
-              padding:20px;
-              text-align:center;
-              border-radius:8px;
-              margin:20px 0;
-            "
-          >
-            <h1
-              style="
-                margin:0;
-                color:#0d6efd;
-                letter-spacing:8px;
-              "
-            >
+          <div style="
+            background:#f4f4f4;
+            padding:20px;
+            text-align:center;
+            border-radius:8px;
+            margin:20px 0;
+          ">
+            <h1 style="
+              margin:0;
+              color:#0d6efd;
+              letter-spacing:8px;
+            ">
               ${otp}
             </h1>
           </div>
@@ -65,21 +64,30 @@ export const sendVerificationEmail = async (email, name, otp) => {
       `,
     });
 
-    console.log("✅ Verification OTP email sent.");
+    if (error) {
+      console.error("❌ Verification Email Error:", error);
+      throw new Error(error.message);
+    }
+
+    console.log("✅ Verification OTP email sent:", data.id);
+
+    return data;
+
   } catch (error) {
-    console.log("Email Error:", error.message);
+    console.error("❌ Verification Email Error:", error.message);
     throw error;
   }
 };
+
 
 // ==========================================
 // Send Password Reset OTP Email
 // ==========================================
 export const sendResetPasswordEmail = async (email, name, otp) => {
   try {
-    await transporter.sendMail({
-      from: `"HR Analytics Platform" <${process.env.EMAIL_USER}>`,
-      to: email,
+    const { data, error } = await resend.emails.send({
+      from: "HR Analytics Platform <onboarding@resend.dev>",
+      to: [email],
       subject: "Password Reset OTP - HR Analytics Platform",
 
       html: `
@@ -99,22 +107,18 @@ export const sendResetPasswordEmail = async (email, name, otp) => {
             Use the OTP below to continue.
           </p>
 
-          <div
-            style="
-              background:#f4f4f4;
-              padding:20px;
-              text-align:center;
-              border-radius:8px;
-              margin:20px 0;
-            "
-          >
-            <h1
-              style="
-                margin:0;
-                color:#dc3545;
-                letter-spacing:8px;
-              "
-            >
+          <div style="
+            background:#f4f4f4;
+            padding:20px;
+            text-align:center;
+            border-radius:8px;
+            margin:20px 0;
+          ">
+            <h1 style="
+              margin:0;
+              color:#dc3545;
+              letter-spacing:8px;
+            ">
               ${otp}
             </h1>
           </div>
@@ -137,9 +141,17 @@ export const sendResetPasswordEmail = async (email, name, otp) => {
       `,
     });
 
-    console.log("✅ Password Reset OTP email sent.");
+    if (error) {
+      console.error("❌ Password Reset Email Error:", error);
+      throw new Error(error.message);
+    }
+
+    console.log("✅ Password Reset OTP email sent:", data.id);
+
+    return data;
+
   } catch (error) {
-    console.log("Email Error:", error.message);
+    console.error("❌ Password Reset Email Error:", error.message);
     throw error;
   }
 };
