@@ -79,7 +79,7 @@ Generate 3-5 points in every section.
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+       model: "gemini-3.6-flash",
 
       contents: prompt,
     });
