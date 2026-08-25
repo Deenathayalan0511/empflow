@@ -18,12 +18,18 @@ function ResetPassword() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      return toast.error("Passwords do not match.");
+      return toast.error("Passwords do not match.",{
+  closeButton: true,
+  autoClose: 3000,
+});
     }
 
     if (password.length < 6) {
       return toast.error(
-        "Password must be at least 6 characters."
+        "Password must be at least 6 characters.",{
+  closeButton: true,
+  autoClose: 3000,
+}
       );
     }
 
@@ -36,7 +42,10 @@ function ResetPassword() {
         password
       );
 
-      toast.success(res.message);
+      toast.success(res.message,{
+  closeButton: true,
+  autoClose: 3000,
+});
 
       localStorage.removeItem("resetEmail");
       localStorage.removeItem("resetOTP");
@@ -48,7 +57,10 @@ function ResetPassword() {
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-          "Unable to reset password."
+          "Unable to reset password.",{
+  closeButton: true,
+  autoClose: 3000,
+}
       );
     } finally {
       setLoading(false);

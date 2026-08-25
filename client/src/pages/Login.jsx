@@ -28,14 +28,19 @@ function Login() {
 
       const res = await login(form);
 
-      toast.success(res.message);
+      toast.success(res.message,{
+  closeButton: true,
+  autoClose: 3000,
+});
 
       navigate("/home");
 
     } catch (err) {
       toast.error(
-        err.response?.data?.message || "Login Failed"
-      );
+        err.response?.data?.message || "Login Failed",{
+  closeButton: true,
+  autoClose: 3000,
+} );
     } finally {
       setLoading(false);
     }

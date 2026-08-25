@@ -33,7 +33,10 @@ function Register() {
     e.preventDefault();
 
     if (form.password !== form.confirmPassword) {
-      return toast.error("Passwords do not match");
+      return toast.error("Passwords do not match",{
+  closeButton: true,
+  autoClose: 3000,
+});
     }
 
     try {
@@ -47,14 +50,20 @@ function Register() {
 
       console.log(res);
 
-      toast.success(res.message);
+      toast.success(res.message,{
+  closeButton: true,
+  autoClose: 3000,
+});
       setShowOTP(true);
     } catch (err) {
       console.log(err);
       console.log(err.response);
       console.log(err.response?.data);
 
-      toast.error(err.response?.data?.message || "Registration Failed");
+      toast.error(err.response?.data?.message || "Registration Failed",{
+  closeButton: true,
+  autoClose: 3000,
+});
     } finally {
       setLoading(false);
     }
@@ -67,7 +76,10 @@ function Register() {
 
       const res = await verifyEmail(form.email, otp);
 
-      toast.success(res.message);
+      toast.success(res.message,{
+  closeButton: true,
+  autoClose: 3000,
+});
 
       localStorage.removeItem("verifyEmail");
 
@@ -75,7 +87,10 @@ function Register() {
         navigate("/login");
       }, 1500);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid OTP");
+      toast.error(err.response?.data?.message || "Invalid OTP",{
+  closeButton: true,
+  autoClose: 3000,
+});
     } finally {
       setLoading(false);
     }
@@ -84,9 +99,15 @@ function Register() {
     try {
       const res = await resendVerification(form.email);
 
-      toast.success(res.message);
+      toast.success(res.message,{
+  closeButton: true,
+  autoClose: 3000,
+});
     } catch (err) {
-      toast.error(err.response?.data?.message || "Unable to resend OTP.");
+      toast.error(err.response?.data?.message || "Unable to resend OTP.",{
+  closeButton: true,
+  autoClose: 3000,
+});
     }
   };
   return (

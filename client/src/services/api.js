@@ -31,7 +31,9 @@ api.interceptors.response.use(
 
       toast.error("Session expired. Please login again.", {
         position: "top-right",
-        autoClose: 2000,
+
+        closeButton: true,
+        autoClose: 3000,
       });
 
       setTimeout(() => {

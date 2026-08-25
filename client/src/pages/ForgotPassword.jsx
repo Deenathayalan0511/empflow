@@ -18,7 +18,10 @@ function ForgotPassword() {
 
       const res = await forgotPassword(email);
 
-      toast.success(res.message);
+      toast.success(res.message,{
+  closeButton: true,
+  autoClose: 3000,
+});
 
       // Save email for next step
       localStorage.setItem("resetEmail", email);
@@ -30,7 +33,10 @@ function ForgotPassword() {
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-          "Something went wrong."
+          "Something went wrong.",{
+  closeButton: true,
+  autoClose: 3000,
+}
       );
     } finally {
       setLoading(false);

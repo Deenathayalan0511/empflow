@@ -47,10 +47,16 @@ function WorkingPage() {
   const addEmployee = async (employee) => {
     try {
       await createEmployee(employee);
-      toast.success("Employee Added Successfully");
+      toast.success("Employee Added Successfully",{
+  closeButton: true,
+  autoClose: 3000,
+});
       loadEmployees();
     } catch (error) {
-      toast.error("Unable to Add Employee");
+      toast.error("Unable to Add Employee",{
+  closeButton: true,
+  autoClose: 3000,
+});
     }
   };
 
@@ -58,11 +64,17 @@ function WorkingPage() {
   const editEmployee = async (employee) => {
     try {
       await updateEmployee(employee.id, employee);
-      toast.success("Employee Updated Successfully");
+      toast.success("Employee Updated Successfully",{
+  closeButton: true,
+  autoClose: 3000,
+});
       setEditing(null);
       loadEmployees();
     } catch (error) {
-      toast.error("Unable to Update Employee");
+      toast.error("Unable to Update Employee",{
+  closeButton: true,
+  autoClose: 3000,
+});
     }
   };
 
@@ -76,14 +88,20 @@ function WorkingPage() {
     try {
       await deleteEmployee(selectedEmployee.id);
 
-      toast.success("Employee Deleted Successfully");
+      toast.success("Employee Deleted Successfully",{
+  closeButton: true,
+  autoClose: 3000,
+});
 
       setShowDeleteModal(false);
       setSelectedEmployee(null);
 
       loadEmployees();
     } catch (error) {
-      toast.error("Unable to Delete Employee");
+      toast.error("Unable to Delete Employee",{
+  closeButton: true,
+  autoClose: 3000,
+});
     }
   };
   const totalEmployees = employees.length;
