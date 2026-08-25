@@ -107,15 +107,7 @@ function App() {
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
 
-      <ToastContainer
-  position="top-right"
-  autoClose={5000}
-  closeButton={true}
-  closeOnClick={false}
-  pauseOnHover={true}
-  draggable={true}
-  theme="colored"
-/>
+     
     </>
   );
 }
