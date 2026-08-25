@@ -108,10 +108,14 @@ function App() {
       </Routes>
 
       <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        theme="colored"
-      />
+  position="top-right"
+  autoClose={5000}
+  closeButton={true}
+  closeOnClick={false}
+  pauseOnHover={true}
+  draggable={true}
+  theme="colored"
+/>
     </>
   );
 }
