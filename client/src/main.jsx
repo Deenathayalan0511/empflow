@@ -15,7 +15,13 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <App />
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        closeButton={true}
+        closeOnClick={false}
+        pauseOnHover={true}
+      />
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );
